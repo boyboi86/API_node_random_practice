@@ -4,6 +4,7 @@ const path = require('path');
 
 const sentence = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla egestas nibh quis posuere sollicitudin.'
 
+/*Creates a file call randomScript with a short sentence*/
 fs.writeFile('randomScript.js', sentence, err => {
 	err? console.error(err) : console.log('piping done!!') 
 });
