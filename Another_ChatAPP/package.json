@@ -1,0 +1,20 @@
+{
+  "name": "Another_ChatAPP",
+  "version": "1.0.0",
+  "description": "Basically another chat app to test social auth/ cloudinary/ socket with mongo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "6.4.0"
+  },
+  "dependencies": {
+    "ejs": "2.3.4",
+    "express": "^4.14.0"
+  }
+}
