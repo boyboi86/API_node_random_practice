@@ -1,8 +1,8 @@
-<!DOCTYPE ejsl>
-<ejsl lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>ChatCat - Topic Goes Here</title>
+	<title>Chatapp - Topic Goes Here</title>
 	<link rel="stylesheet" href="/css/chatroomStyles.css">
 	<script src="/js/jquery-2.1.4.min.js"></script>
 </head>
@@ -12,10 +12,10 @@
 			<h1>ChatCAT | Topic Goes Here</h1>
 		</div>
 		<div class="controls">
-			<div class="userPicHolder"><img src="/img/user.jpg" alt="John Doe"></div>
-			<p class="userName">John Doe</p>
+			<div class="userPicHolder"><img src="<%= user.profilePic %>" alt="<%= user.fullName %>"></div>
+			<p class="userName"><%= user.fullName %></p>
 			<a href="rooms" id="roomsBtn">Rooms</a>
-			<a href="/" id="logOutBtn">Logout</a>
+			<a href="/logout" id="logOutBtn">Logout</a>
 		</div>
 		<div class="chatListDiv">
 			<div class="chatMessagesPanel">

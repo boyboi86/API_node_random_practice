@@ -1,6 +1,7 @@
 'use strict';
 
 const router = require('express').Router();
+const db = require('../db');
 
 //iterate thru the above Objectify and perform a recursive method to call
 let _registerRoutes = (routes, method) => {
@@ -26,6 +27,59 @@ let route = routes => {
   return router;
 }
 
+/*find a single user based on a key*/
+let findOne = profileID => {
+    return db.userModel.findOne({
+     'profileId': profileID
+  });
+}
+
+/*photo is array always return 0 which would most likely be profile picture, otherwise use blank*/
+let createNewUser = profile => {
+  return new Promise((resolve, reject) => {
+    let newChatUser = new db.userModel({
+      profileId: profile.id,
+      fullName: profile.displayName,
+      profilePic: profile.photos[0].value || ""
+    });
+    newChatUser.save(error => {
+      if(error){
+        console.error('error saving profile');
+        reject(error);
+      } else {
+        resolve(newChatUser)
+      }
+    })
+  })
+}
+
+let findById = id => {
+  return new Promise((resolve, reject) => {
+    db.userModel.findById(id, (error, user) => {
+      if(error){
+        reject(error);
+      } else {
+        resolve(user);
+      }
+    })
+  })
+}
+/*req.isAuthenticated is a method provided by passport for session that returns boolean*/
+/*This is to guard against trespassers, an in-build middleware*/
+let isAuthenticated = (req, res, next) => {
+  // console.log(req.isAuthenticated())
+  // console.log(req);
+  if(req.isAuthenticated()){
+    next()
+  } else {
+    res.redirect('/');
+  }
+}
+
 module.exports = {
-  route
+  route,
+  findOne,
+  createNewUser,
+  findById,
+  isAuthenticated
 }

@@ -1,20 +1,42 @@
 'use strict';
 /*Objectify routes content must not be array or null*/
 const helper = require('../helper');
+const db = require('../db');
+const passport = require('passport');
 /*render method can only be called with there is a view folder plus whe the view engine is set
   it will be called as long as the file name is same as the res.render */
 module.exports = () => {
   let routes = {
       'get': {
-      '/': (req, res, next) => {
-        res.render('login');
-      },
-      '/rooms': (req, res, next) => {
-          res.render('rooms');
-      },
-      '/chat': (req, res, next) => {
-        res.render('chatroom');
-      }
+        '/': (req, res, next) => {
+          res.render('login');
+        },
+        '/rooms': [helper.isAuthenticated, (req, res, next) => {
+          /*Allow passport to save to DB then do another call from existing dbuser to reflect info*/
+            res.render('rooms', {
+              user: req.user
+            });
+          }],
+        '/chat': [helper.isAuthenticated, (req, res, next) => {
+          res.render('chatroom', {
+            user: req.user
+          });
+        }],
+        '/auth/facebook': passport.authenticate('facebook'),
+        '/auth/facebook/callback': passport.authenticate('facebook', {
+          successRedirect: '/rooms',
+          failureRedirect: '/'
+        }),
+        '/auth/twitter': passport.authenticate('twitter'),
+        '/auth/twitter/callback': passport.authenticate('twitter', {
+          successRedirect: '/rooms',
+          failureRedirect: '/'
+        }),
+        '/logout': (req, res, next) => {
+          /*this is a passport method logout(), you can call it simply by req.logout()*/
+          req.logout();
+          res.redirect('/');
+        }
     },
 
     'post': {
