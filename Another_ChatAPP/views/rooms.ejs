@@ -14,16 +14,29 @@
 	/* roomslist is not a route, it is a socket namespace */
 		$(() => {
 			/* This will initialize the socket.io process usally if not using http instead of http use ws*/
-		let socket = io('http://localhost:3000/roomslist');
+		let socket = io('<%= host %>' + '/roomslist');
 		/* This will react on event 'connect' */
-		socket.on('connect', () => console.log('client connected'))
+		let renderChatRooms = chatroom => {
+			let roomListDiv = $('#roomsListUL');
+			let listStr = '';
+			for(let cat of chatroom){
+				listStr += `<a href="/chat/${cat.roomID}"><li>${cat.room}</li></a>`;
+				roomListDiv.html('').append(listStr);
+			}
+		}
+		/*This will emits 'getChatRoom' to server.js*/
+		socket.emit('getChatRoom');
+		/*Event Listener for chatRoomsList and invoke renderChatRooms and deserialize them*/
+		socket.on('chatRoomsList', chatroom => {
+			renderChatRooms(JSON.parse(chatroom));
+		})
 	});
 	</script>
 </head>
 <body>
 	<div class="container">
 		<div class="titlePanel">
-			<h1>ChatCAT | Select or Create a Chatroom</h1>
+			<h1>Chat App | Select or Create a Chatroom</h1>
 		</div>
 		<div class="controls">
 			<div class="userPicHolder"><img src="<%= user.profilePic %>" alt="<%= user.fullName %>"></div>
@@ -37,7 +50,7 @@
 		<div class="roomsListDiv">
 			<ul class="roomsList" id="roomsListUL">
 			<!-- Loop list items here -->
-				<a href="chatroom.ejs"><li>World Cuisine</li></a>
+
 				<a href="chatroom.ejs"><li>Coffee and Conversations</li></a>
 			<!-- Loop ends -->
 			</ul>

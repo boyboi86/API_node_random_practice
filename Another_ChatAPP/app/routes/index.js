@@ -3,6 +3,7 @@
 const helper = require('../helper');
 const db = require('../db');
 const passport = require('passport');
+const config = require('../config');
 /*render method can only be called with there is a view folder plus whe the view engine is set
   it will be called as long as the file name is same as the res.render */
 module.exports = () => {
@@ -14,12 +15,14 @@ module.exports = () => {
         '/rooms': [helper.isAuthenticated, (req, res, next) => {
           /*Allow passport to save to DB then do another call from existing dbuser to reflect info*/
             res.render('rooms', {
-              user: req.user
+              user: req.user,
+              host: config.host
             });
           }],
         '/chat': [helper.isAuthenticated, (req, res, next) => {
           res.render('chatroom', {
-            user: req.user
+            user: req.user,
+            host: config.host
           });
         }],
         '/auth/facebook': passport.authenticate('facebook'),
