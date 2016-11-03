@@ -5,6 +5,20 @@
 	<title>Chatapp - Rooms</title>
 	<link rel="stylesheet" href="/css/roomsStyles.css">
 	<script src="/js/jquery-2.1.4.min.js"></script>
+	<!-- insert socket.io -->
+	<!-- if it wasn't the fact that we are using engines ^6, we would have required babel.min.js -->
+	<script src="/socket.io/socket.io.js"></script>
+<!-- Script for front-end socket.io -->
+	<script>
+	'use strict';
+	/* roomslist is not a route, it is a socket namespace */
+		$(() => {
+			/* This will initialize the socket.io process usally if not using http instead of http use ws*/
+		let socket = io('http://localhost:3000/roomslist');
+		/* This will react on event 'connect' */
+		socket.on('connect', () => console.log('client connected'))
+	});
+	</script>
 </head>
 <body>
 	<div class="container">
