@@ -22,6 +22,6 @@ app.use('/', chat.router);
 
 const port = app.get('port')
 
-app.listen(port, err => {
+chat.ioServer(app).listen(port, err => {
   err? console.error('err has occurred') : console.log(`server started on port ${port}`);
 })
