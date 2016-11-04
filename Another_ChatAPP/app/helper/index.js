@@ -2,6 +2,7 @@
 
 const router = require('express').Router();
 const db = require('../db');
+const crypto = require('crypto');
 
 //iterate thru the above Objectify and perform a recursive method to call
 let _registerRoutes = (routes, method) => {
@@ -76,10 +77,31 @@ let isAuthenticated = (req, res, next) => {
   }
 }
 
+/* create a method to search through the entire list of roomNames in allrooms and see it exists */
+let findRoomByName = (allrooms, rooms) => {
+  let findRoom = allrooms.findIndex((element, index, array) => {
+    if(element.room === room) {
+      return true;
+    } else {
+      return false;
+    }
+    /*if it is greater than 0 it means room exists,
+      this is a simple validator because if you use lowercase or trim validtion will still be false*/
+    return findRoom > -1 ? true: false;
+  })
+}
+
+/*generate a random roomID*/
+let randomHex = () => {
+  return crypto.randomBytes(24).toString('Hex');
+}
+
 module.exports = {
   route,
   findOne,
   createNewUser,
   findById,
-  isAuthenticated
+  isAuthenticated,
+  findRoomByName,
+  randomHex
 }
