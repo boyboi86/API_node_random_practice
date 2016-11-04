@@ -15,6 +15,7 @@
 		$(() => {
 			/* This will initialize the socket.io process usally if not using http instead of http use ws*/
 		let socket = io('<%= host %>' + '/roomslist');
+		let newRoomInput = $("input[name='roomName']")
 		/* This will react on event 'connect' */
 		let renderChatRooms = chatroom => {
 			let roomListDiv = $('#roomsListUL');
@@ -29,6 +30,13 @@
 		/*Event Listener for chatRoomsList and invoke renderChatRooms and deserialize them*/
 		socket.on('chatRoomsList', chatroom => {
 			renderChatRooms(JSON.parse(chatroom));
+		})
+		/*using jQuery click Listener to create a new room as long as val is not empty*/
+		$('#createBtn').on('click', () => {
+			if(newRoomInput.val() !== ''){
+				socket.emit('createNewRoom', newRoomInput.val());
+				newRoomInput.val('');
+			}
 		})
 	});
 	</script>
@@ -51,7 +59,6 @@
 			<ul class="roomsList" id="roomsListUL">
 			<!-- Loop list items here -->
 
-				<a href="chatroom.ejs"><li>Coffee and Conversations</li></a>
 			<!-- Loop ends -->
 			</ul>
 		</div>
