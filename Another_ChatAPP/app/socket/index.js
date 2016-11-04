@@ -17,7 +17,7 @@ module.exports = (io, app) => {
           allrooms.push({
             room: newRoomInput,
             roomID: helper.randomHex(),
-            user: []
+            users: []
           })
           /* Emit an updated list  to creator */
           socket.emit('chatRoomsList', JSON.stringify(allrooms));
@@ -25,5 +25,23 @@ module.exports = (io, app) => {
           socket.broadcast.emit('chatRoomsList', JSON.stringify(allrooms));
       }
     })
+  })
+
+  io.of('/chatter').on('connection', socket => {
+    /* Join a chatroom */
+    socket.on('join', data => {
+      let usersList = helper.addUserToRoom(allrooms, data, socket);
+      /* Update a list of user  */
+        socket.broadcast.to('data.roomID').emit('updateUsersList', JSON.stringify(usersList.users));
+        socket.emit('updateUsersList', JSON.stringify(usersList.users));
+    })
+
+    /*on disconnect, you will need to refresh the page*/
+    socket.on('disconnect', () => {
+      /*find the room and purge user that exit chat room*/
+      let room = removeUserFromRoom(allrooms, socket);
+      socket.broadcast.to(room.roomID).emit('updateUsersList', JSON.stringify(room.users));
+    })
+
   })
 }
