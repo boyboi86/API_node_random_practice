@@ -107,6 +107,60 @@ let findRoomById = (allrooms, roomID) => {
   })
 }
 
+/* Add a user to chatroom */
+let addUserToRoom = (allrooms, data, socket) => {
+  /* Get the room subject */
+  let getRoom = findRoomById(allrooms, data.roomID);
+  if(getRoom !== undefined){
+    /* Get active user ID*/
+    /* Previously we were using express-session
+      when we use io.use so we already expose to session and can 'borrow' session from express*/
+    let userID = socket.request.session.passport.user
+
+    let checkUser = getRoom.users.findIndex((element, index, array) => {
+      if(element.userID === userID) {
+        return true
+      } else {
+        return false
+      }
+    })
+    /* If the user already exist in the room, remove user first */
+    if(checkUser > -1){
+      getRoom.users.splice(checkUser, 1);
+    }
+    // Push user into user array
+    getRoom.users.push({
+      socketID: socket.id,
+      userID,
+      user: data.user,
+      userPic: data.userPic
+    });
+    /*Join room channel again*/
+    socket.join(data.roomID);
+
+    /*update user list*/
+    return getRoom;
+  }
+}
+
+let removeUserFromRoom = (allrooms, socket) => {
+  for(let room of allrooms){
+    let findUser = room.users.findIndex((element, index, array) => {
+      if(element.socketID === socket.id){
+        return true;
+      } else {
+        return false;
+      }
+      if(findUser > -1){
+        socket.leave(room.roomID);
+        room.users.splice(findUser, 1);
+        return room;
+      }
+    })
+  }
+}
+
+
 module.exports = {
   route,
   findOne,
@@ -115,5 +169,7 @@ module.exports = {
   isAuthenticated,
   findRoomByName,
   randomHex,
-  findRoomById
+  findRoomById,
+  addUserToRoom,
+  removeUserFromRoom
 }
