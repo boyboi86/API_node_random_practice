@@ -5,16 +5,29 @@
 	<title>Chatapp - Topic Goes Here</title>
 	<link rel="stylesheet" href="/css/chatroomStyles.css">
 	<script src="/js/jquery-2.1.4.min.js"></script>
+	<!-- insert socket.io -->
+	<!-- if it wasn't the fact that we are using engines ^6, we would have required babel.min.js -->
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	'use strict';
+	$(() => {
+		let socket = io('<%= host %>' + '/chatter');
+		let roomID = '<%= roomID %>';
+		let user = '<%= user.fullname %>';
+		let userPic = '<%= user.profilePic %>';
+
+	})
+	</script>
 </head>
 <body>
 	<div class="container">
 		<div class="titlePanel">
-			<h1>Chat App | Topic Goes Here</h1>
+			<h1>Chat App | <%= room %></h1>
 		</div>
 		<div class="controls">
 			<div class="userPicHolder"><img src="<%= user.profilePic %>" alt="<%= user.fullName %>"></div>
 			<p class="userName"><%= user.fullName %></p>
-			<a href="rooms" id="roomsBtn">Rooms</a>
+			<a href="/rooms" id="roomsBtn">Rooms</a>
 			<a href="/logout" id="logOutBtn">Logout</a>
 		</div>
 		<div class="chatListDiv">
