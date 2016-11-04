@@ -80,7 +80,7 @@ let isAuthenticated = (req, res, next) => {
 /* create a method to search through the entire list of roomNames in allrooms and see it exists */
 let findRoomByName = (allrooms, rooms) => {
   let findRoom = allrooms.findIndex((element, index, array) => {
-    if(element.room === room) {
+    if(element.rooms === rooms) {
       return true;
     } else {
       return false;
@@ -91,9 +91,20 @@ let findRoomByName = (allrooms, rooms) => {
   })
 }
 
-/*generate a random roomID*/
+/* generate a random roomID*/
 let randomHex = () => {
   return crypto.randomBytes(24).toString('Hex');
+}
+
+/* find room by id */
+let findRoomById = (allrooms, roomID) => {
+  return allrooms.find((element, index, array) => {
+    if(element.roomID === roomID){
+      return true;
+    } else {
+      return false;
+    }
+  })
 }
 
 module.exports = {
@@ -103,5 +114,6 @@ module.exports = {
   findById,
   isAuthenticated,
   findRoomByName,
-  randomHex
+  randomHex,
+  findRoomById
 }
