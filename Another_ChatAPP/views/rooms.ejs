@@ -9,6 +9,7 @@
 	<script>
 	'use strict';
 	$(() => {
+		/*Create pipeline and defined transport layer as websocket*/
 		let socket = io('<%= host %>' + '/roomslist', {
 			transports: ['websocket']
 		});
@@ -23,10 +24,10 @@
 			roomsListDiv.html('').append(listStr);
 		}
 
-		// Get a list of chatrooms
+		/* Get a list of chatrooms*/
 		socket.emit('getChatrooms');
 
-		// Event listener for chatRoomsList
+		/* Event listener for chatRoomsList */
 		socket.on('chatRoomsList', chatrooms => {
 			renderChatRooms(JSON.parse(chatrooms));
 		});
