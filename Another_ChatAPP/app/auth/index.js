@@ -5,6 +5,7 @@ const config = require('../config');
 const FbStrategy = require('passport-facebook').Strategy;
 const TwStrategy = require('passport-twitter').Strategy;
 const helper = require('../helper');
+const logger = require('../logger');
 
 module.exports = () => {
   /*You can use serialization or jwt strategy but that will be another module by itself*/
@@ -17,7 +18,7 @@ module.exports = () => {
     // find user using the id
     helper.findById(id)
       .then(user => done(null, user))
-      .catch(error => console.log('Error when deserialize the user'));
+      .catch(error => logger.log('error','Error when deserialize the user' + error));
   })
 
   let authProcess = (accessToken, refreshToken, profile, done) => {
@@ -32,7 +33,7 @@ module.exports = () => {
           //create new user
           helper.createNewUser(profile)
             .then(newChatUser => done(null, newChatUser))
-            .catch(error => console.error('error in creating new user'))
+            .catch(error => logger.log('error', 'error in creating new user' + error))
         }
       })
   }

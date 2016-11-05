@@ -12,6 +12,14 @@ app.set('view engine', 'ejs');
 /*Session must before routes otherwise it will not initialize*/
 /*Session must before passport otherwise it will not whenever you use any method that is passed into req it will be invalid*/
 app.use('/', chat.session);
+app.use(require('morgan')('combined', {
+  stream: {
+    write: message => {
+      //write log
+      chat.logger.log('info', message)
+    }
+  }
+}))
 
 app.use(passport.initialize());
 app.use(passport.session());
