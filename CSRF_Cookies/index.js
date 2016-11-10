@@ -23,7 +23,8 @@ app.get('/form', csrfProtection, function(req, res) {
   /* For angular 2 the XSRF-strategy will pick up this name and value then set them to header X-XSRF-TOKEN */
   /* In actual production, cookie option domain must be set appropriately  */
   let token = req.csrfToken()
-  res.cookie('XSRF-TOKEN', token, { maxAge: 900000 }).send('token set');
+  res.cookie('XSRF-TOKEN', token, { maxAge: 900000 }).send('token sent');
+  /*In actual production there shouldn't be any log for the below*/
   console.log('token sent', token);
 })
  
